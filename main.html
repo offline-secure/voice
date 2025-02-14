@@ -39,33 +39,12 @@
     <div id="container" style="display: flex; gap: 20px; position: relative; width: 100%;">
         <iframe id="iframe1" src="http://localhost:5173" style="width: 100%; height: 300px;"></iframe>
         <iframe id="iframe2" src="http://localhost:5174" style="width: 100%; height: 300px;"></iframe>
+
         <iframe id="iframe3" src="http://localhost:5175" style="width: 100%; height: 300px;"></iframe>
     </div>
 
     <script>
 
-        // Set url accordingly
-        const currentUrl = window.location.href;
-        const isProd = (currentUrl.includes('offline-secure'))
-
-        const iframe1 = document.getElementById('iframe1');
-        const iframe2 = document.getElementById('iframe2');
-        const iframe3 = document.getElementById('iframe3');
-
-        if (isProd) {
-            iframe1.src = 'https://offline-secure.github.io/voice/whisperweb/dist/index.html';
-            iframe2.src = 'https://offline-secure.github.io/voice/deepseekweb/dist/index.html';
-            iframe3.src = 'https://offline-secure.github.io/voice/gemma-2-2b-jpn-webgpu/dist/index.html';
-        }
-
-        else {
-            iframe1.src = 'http://localhost:5173';
-            iframe2.src = 'http://localhost:5174';
-            iframe3.src = 'http://localhost:5175';
-        }
-        iframe.contentWindow.location.reload(); // reload the iframe's content window
-
-        // add helper
         window.addEventListener('message', (event) => {
             if (event.data.type === 'relay_to_iframe2') {
                 const payload = event.data.data;

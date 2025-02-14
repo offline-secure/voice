@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whisper WebGPU Integration</title>
+    <script type="module">
+        import { pipeline } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0';
+
+        async function loadWhisperModel() {
+            const modelId = 'onnx-community/whisper-large-v3-turbo';
+            const transcriber = await pipeline("automatic-speech-recognition", modelId, { device: 'webgpu' });
+            return transcriber;
+        }
+
+        document.getElementById('fileInput').addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            document.getElementById('status').innerText = 'Transcribing...';
+
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const blob = new Blob([arrayBuffer]);
+
+                const url = URL.createObjectURL(blob);
+
+                const transcriber = await loadWhisperModel();
+                const result = await transcriber(url);
+                
+                document.getElementById('status').innerText = 'Transcription result:';
+                document.getElementById('transcriptionResult').innerText = result.text;
+            } catch (error) {
+                document.getElementById('status').innerText = 'Error: ' + error.message;
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>Whisper WebGPU Integration</h1>
+    <p id="status">Upload an audio file to transcribe:</p>
+    <input type="file" id="fileInput" accept="audio/*">
+    <pre id="transcriptionResult"></pre>
+</body>
+</html>
