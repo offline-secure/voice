@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <style>
+        iframe {
+            min-height: 100vh;
+        }
+
+        @media (max-width: 768px),
+        (orientation: portrait) {
+            #container {
+                flex-direction: column;
+            }
+
+            iframe {}
+
+            #arrow {
+                border-left: none;
+                border-top: none;
+                border-right: 15px solid transparent;
+                border-bottom: 20px solid black;
+                left: 50%;
+                top: 100%;
+                transform: translateX(-50%);
+            }
+        }
+
+        #btnImport {
+            margin-top: 30px;
+            font-size: large;
+            font-weight: 400;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="container" style="display: flex; gap: 20px; position: relative; width: 100%;">
+        <iframe id="iframe1" src="http://localhost:5173" style="width: 100%; height: 300px;"></iframe>
+        <iframe id="iframe2" src="http://localhost:5174" style="width: 100%; height: 300px;"></iframe>
+
+        <iframe id="iframe3" src="http://localhost:5175" style="width: 100%; height: 300px;"></iframe>
+    </div>
+
+    <script>
+
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'relay_to_iframe2') {
+                const payload = event.data.data;
+                iframe2.contentWindow.postMessage(payload, '*');
+            }
+        });
+
+    </script>
+</body>
+
+</html>
