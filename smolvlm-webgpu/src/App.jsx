@@ -194,6 +194,37 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (!document || !document.getElementById('btnLoadModel')) return;
+      document.getElementById('btnLoadModel').click()
+    }, 5000);
+    const PRESET_PROMPT = `Please see this transcript.\n
+     It is by by a customer support service agent.\n\n No need deep tihnk.
+     You need to provide \n
+     1. The summary. \n 
+     3. Sentiment\n
+     No yapping . Be brief.\n\n
+
+     =====Conversation Input below======\n
+      <conversation-input>\n
+     =====Conversation Input above======\n\n
+    
+    `
+    window.addEventListener('message', (event) => {
+
+      const payload = event.data;
+      let textValue = PRESET_PROMPT
+      textValue = textValue.replace('<conversation-input>', payload.text);
+    
+      console.log('textValue', textValue); // { foo: 'bar', baz: 'qux' }
+      setInput(textValue)
+
+      setTimeout(() => {
+        // if (document.getElementById('btnSubmit')) return document.getElementById('btnSubmit').click()
+      }, 2200);
+    });
+  }, [])
   // Send the messages to the worker thread whenever the `messages` state changes.
   useEffect(() => {
     if (messages.filter((x) => x.role === "user").length === 0) {
@@ -286,6 +317,8 @@ function App() {
             )}
 
             <button
+
+              id='btnLoadModel'
               className="border border-gray-300 dark:border-gray-600 px-4 py-2 rounded-lg bg-blue-400 text-white hover:bg-blue-500 disabled:bg-blue-100 cursor-pointer disabled:cursor-not-allowed select-none"
               onClick={() => {
                 worker.current.postMessage({ type: "load" });
