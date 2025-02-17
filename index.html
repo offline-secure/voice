@@ -4,12 +4,38 @@
     <style>
         iframe {
             min-height: 100vh;
+            border: solid 5px;
         }
+
+
+        #container {
+            display: flex;
+            display: flex;
+            gap: 5px;
+            position: relative;
+            width: 100%;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        #container>* {
+            flex-basis: calc(30vw - 5px);
+            /* 3 columns, with 20px gap */
+            margin: 5px;
+        }
+
+
 
         @media (max-width: 768px),
         (orientation: portrait) {
             #container {
                 flex-direction: column;
+            }
+
+            #container>* {
+                flex-basis: 100%;
+                /* 1 column, full width */
+                margin: 10px 0;
             }
 
             iframe {}
@@ -36,40 +62,67 @@
 <body>
 
 
-    <div id="container" style="display: flex; gap: 20px; position: relative; width: 100%;">
+    <div id="container">
         <iframe id="iframe1" src="http://localhost:5173" style="width: 100%; height: 300px;"></iframe>
         <iframe id="iframe2" src="http://localhost:5174" style="width: 100%; height: 300px;"></iframe>
         <iframe id="iframe3" src="http://localhost:5175" style="width: 100%; height: 300px;"></iframe>
+
+        <br/>
+        <iframe id="iframe4" src="http://localhost:5176" style="width: 100%; height: 300px;"></iframe>
+        <iframe id="iframe5" src="http://localhost:5177" style="width: 100%; height: 300px;"></iframe>
+        <iframe id="iframe6" src="http://localhost:5178" style="width: 100%; height: 300px;"></iframe>
     </div>
 
     <script>
 
         // Set url accordingly
-        const currentUrl = window.location.href;
-        const isProd = (currentUrl.includes('offline-secure'))
+        let currentUrl = window.location.origin;
+        const isDev = (currentUrl.includes('localhost')) || (currentUrl.includes('file://'))
+
+        const isGithub = (currentUrl.includes('github'))
+        currentUrl = currentUrl + (isGithub ? '/voice' : '/');
 
         const iframe1 = document.getElementById('iframe1');
         const iframe2 = document.getElementById('iframe2');
         const iframe3 = document.getElementById('iframe3');
 
-        if (isProd) {
+
+        const iframe4 = document.getElementById('iframe4');
+        const iframe5 = document.getElementById('iframe5');
+        const iframe6 = document.getElementById('iframe6');
+
+        if (!isDev) {
             iframe1.src = 'https://offline-secure.github.io/voice/whisperweb/dist/index.html';
-            iframe2.src = 'https://offline-secure.github.io/voice/deepseekweb/dist/index.html';
+            iframe2.src = 'https://offline-secure.github.io/voice/llama-3.2-webgpu/dist/index.html';
             iframe3.src = 'https://offline-secure.github.io/voice/gemma-2-2b-jpn-webgpu/dist/index.html';
+
+
+            iframe4.src = 'https://offline-secure.github.io/voice/phi-3.5-webgpu/dist/index.html';
+            iframe5.src = 'https://offline-secure.github.io/voice/smolvlm-webgpu/dist/index.html';
+            iframe6.src = 'https://offline-secure.github.io/voice/deepseekweb/dist/index.html';
         }
 
         else {
             iframe1.src = 'http://localhost:5173';
             iframe2.src = 'http://localhost:5174';
             iframe3.src = 'http://localhost:5175';
+
+
+            iframe4.src = 'http://localhost:5176';
+            iframe5.src = 'http://localhost:5177';
+            iframe6.src = 'http://localhost:5178';
         }
-        iframe.contentWindow.location.reload(); // reload the iframe's content window
+        // iframe.contentWindow.location.reload(); // reload the iframe's content window
 
         // add helper
         window.addEventListener('message', (event) => {
             if (event.data.type === 'relay_to_iframe2') {
                 const payload = event.data.data;
                 iframe2.contentWindow.postMessage(payload, '*');
+                iframe3.contentWindow.postMessage(payload, '*');
+                iframe4.contentWindow.postMessage(payload, '*');
+                iframe5.contentWindow.postMessage(payload, '*');
+                iframe6.contentWindow.postMessage(payload, '*');
             }
         });
 
