@@ -32,8 +32,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [tps, setTps] = useState(null);
   const [numTokens, setNumTokens] = useState(null);
-  const [text, setText] = useState('');
-
+ 
 
   useEffect(() => {
     setTimeout(() => {
@@ -57,7 +56,7 @@ function App() {
       const payload = event.data;
       let textValue = PRESET_PROMPT
       textValue = textValue.replace('<conversation-input>', payload.text);
-      setText(textValue);
+   
       console.log('textValue', textValue); // { foo: 'bar', baz: 'qux' }
       setInput(textValue)
 
