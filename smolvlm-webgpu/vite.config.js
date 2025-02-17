@@ -4,6 +4,6 @@ import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
 export default defineConfig({ 
-  base: 'https://offline-secure.github.io/voice/smolvlm-webgpu/dist',
+  base: 'https://d252d57s6crzq1.cloudfront.net/smolvlm-webgpu/dist',
   plugins: [tailwindcss(), react()],
 });
